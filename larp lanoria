@@ -98,46 +98,6 @@ function Library:CreateLabel(Properties, IsHud)
     return Library:Create(_Instance, Properties);
 end;
 
-    -- Neon glow: layered transparent frames radiating outward
-    local GlowColors = {
-        { Expand = 6,  Alpha = 0.55 },
-        { Expand = 14, Alpha = 0.30 },
-        { Expand = 24, Alpha = 0.14 },
-        { Expand = 36, Alpha = 0.06 },
-        { Expand = 52, Alpha = 0.025 },
-    };
-
-    local GlowFrames = {};
-
-    local function RebuildGlow()
-        local AccentR = Library.AccentColor.R
-        local AccentG = Library.AccentColor.G
-        local AccentB = Library.AccentColor.B
-        for _, GlowFrame in next, GlowFrames do
-            GlowFrame.BackgroundColor3 = Color3.new(AccentR, AccentG, AccentB)
-        end
-    end
-
-    for i, Layer in next, GlowColors do
-        local e = Layer.Expand
-        local GlowFrame = Library:Create('Frame', {
-            AnchorPoint = Vector2.new(0.5, 0.5);
-            BackgroundColor3 = Library.AccentColor;
-            BackgroundTransparency = 1 - Layer.Alpha;
-            BorderSizePixel = 0;
-            Position = UDim2.new(0.5, 0, 0.5, 0);
-            Size = UDim2.new(1, e * 2, 1, e * 2);
-            ZIndex = 0;
-            Parent = Outer;
-        });
-        table.insert(GlowFrames, GlowFrame)
-    end
-
-    -- Keep glow color in sync with accent color changes
-    Library:GiveSignal(RenderStepped:Connect(function()
-        RebuildGlow()
-    end))
-
 
 function Library:MakeDraggable(Instance, Cutoff)
     Instance.Active = true;
@@ -2461,42 +2421,42 @@ function Library:CreateWindow(...)
     Library:MakeDraggable(Outer, 25);
 
     local GlowColors = {
-    { Expand = 6,  Alpha = 0.55 },
-    { Expand = 14, Alpha = 0.30 },
-    { Expand = 24, Alpha = 0.14 },
-    { Expand = 36, Alpha = 0.06 },
-    { Expand = 52, Alpha = 0.025 },
-};
+        { Expand = 6,  Alpha = 0.55 },
+        { Expand = 14, Alpha = 0.30 },
+        { Expand = 24, Alpha = 0.14 },
+        { Expand = 36, Alpha = 0.06 },
+        { Expand = 52, Alpha = 0.025 },
+    };
 
-local GlowFrames = {};
+    local GlowFrames = {};
 
-local function RebuildGlow()
-    local AccentR = Library.AccentColor.R
-    local AccentG = Library.AccentColor.G
-    local AccentB = Library.AccentColor.B
-    for _, GlowFrame in next, GlowFrames do
-        GlowFrame.BackgroundColor3 = Color3.new(AccentR, AccentG, AccentB)
+    local function RebuildGlow()
+        local AccentR = Library.AccentColor.R
+        local AccentG = Library.AccentColor.G
+        local AccentB = Library.AccentColor.B
+        for _, GlowFrame in next, GlowFrames do
+            GlowFrame.BackgroundColor3 = Color3.new(AccentR, AccentG, AccentB)
+        end
     end
-end
 
-for i, Layer in next, GlowColors do
-    local e = Layer.Expand
-    local GlowFrame = Library:Create('Frame', {
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundColor3 = Library.AccentColor;
-        BackgroundTransparency = 1 - Layer.Alpha;
-        BorderSizePixel = 0;
-        Position = UDim2.new(0.5, 0, 0.5, 0);
-        Size = UDim2.new(1, e * 2, 1, e * 2);
-        ZIndex = 0;
-        Parent = Outer;
-    });
-    table.insert(GlowFrames, GlowFrame)
-end
+    for i, Layer in next, GlowColors do
+        local e = Layer.Expand
+        local GlowFrame = Library:Create('Frame', {
+            AnchorPoint = Vector2.new(0.5, 0.5);
+            BackgroundColor3 = Library.AccentColor;
+            BackgroundTransparency = 1 - Layer.Alpha;
+            BorderSizePixel = 0;
+            Position = UDim2.new(0.5, 0, 0.5, 0);
+            Size = UDim2.new(1, e * 2, 1, e * 2);
+            ZIndex = 0;
+            Parent = Outer;
+        });
+        table.insert(GlowFrames, GlowFrame)
+    end
 
-Library:GiveSignal(RenderStepped:Connect(function()
-    RebuildGlow()
-end))
+    Library:GiveSignal(RenderStepped:Connect(function()
+        RebuildGlow()
+    end))
 
     local Inner = Library:Create('Frame', {
         BackgroundColor3 = Library.MainColor;
@@ -2507,6 +2467,8 @@ end))
         ZIndex = 1;
         Parent = Outer;
     });
+
+    -- rest of CreateWindow continues unchanged...
 
     Library:AddToRegistry(Inner, {
         BackgroundColor3 = 'MainColor';
